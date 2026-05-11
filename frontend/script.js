@@ -7,7 +7,7 @@ async function cargarCuestionario() {
     const html = await response.text();
     contenedor.innerHTML = html;
 
-    // Programar el evento del botón "Enviar" que ahora está en el DOM
+    // Programar el evento del botón "Enviar"
     const btnEnviar = document.getElementById('btn-enviar');
     btnEnviar.addEventListener('click', procesarYEnviar);
   } catch (error) {
@@ -19,7 +19,7 @@ async function cargarCuestionario() {
 async function procesarYEnviar() {
   const formulario = document.getElementById('quiz-form');
 
-  // El backend espera un Map: { "Fantasía": 20, "Misterio": 10... }
+  // preparación de estructura de datos para el backend
   let puntajes = {
     "Fantasía": 0,
     "Ciencia ficción": 0,
@@ -30,7 +30,7 @@ async function procesarYEnviar() {
     "Romance": 0
   };
 
-  // 1. CORRECCIÓN: Buscamos todos los radios marcados
+  // 1. Se seleccionan ratios marcados para obtener valores
   const seleccionados = formulario.querySelectorAll('input[type="radio"]:checked');
 
   if (seleccionados.length === 0) {
@@ -38,7 +38,7 @@ async function procesarYEnviar() {
     return;
   }
 
-  // 2. Agrupamos por el atributo 'data-genero' para evitar el error de deselección
+  // Agrupación por atributo
   seleccionados.forEach(input => {
     const genero = input.getAttribute('data-genero');
     const puntos = parseInt(input.value);
@@ -67,14 +67,14 @@ async function procesarYEnviar() {
 function mostrarResultados(lista) {
   const contenedor = document.getElementById('quiz-container');
 
-  // Tomamos solo los primeros 3 (asumiendo que el backend ya los ordena)
+  // Tomamos solo los primeros 3
   const topTres = lista.slice(0, 3);
 
   let html = '<div class="resultados-finales">';
   html += '<h2>Tu Top 3 de Géneros Literarios</h2><ul>';
 
   topTres.forEach((item, index) => {
-    // Asignamos clase según el puesto para el CSS (puesto-1, puesto-2, puesto-3)
+    // Asignamos clases de estilo css
     const clasePuesto = `puesto-${index + 1}`;
     const medalla = index === 0 ? 'Top 1' : index === 1 ? 'Top 2' : 'Top 3';
 
